@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="opaque_red">#f00</color>
+    <color name="translucent_red">#80ff0000</color>
+    <color name="background_splash">#ed413b</color>
+    <color name="dark_red">#AA202E</color>
+    <color name="bright_red">#DF2028</color>
+    <color name="gray">#D1CCC9</color>
+    <color name="white">#FFF</color>
+    <color name="black">#333</color>
+
+
+    <!--Primary Color Palette-->
+
+    <color name="coloPrimary">#F44336</color> <!--toolbar and big elements-->
+    <color name="colorPrimaryDark">#D32F2F</color> <!-- status bar color-->
+    <color name="colorPrimaryLight">#ffcdd2</color>
+    <color name="textColorPrimary">#FFF</color>
+    <color name="windowBackground">#FFF</color>
+    <color name="navigationBarColor">#D32F2F</color>
+
+    <!--Secondary color palette-->
+    <color name="colorAccentPrimary">#FFC400</color>
+    <color name="colorAccentPrimaryDark">#FFAB00</color>
+    <color name="colorAccentFallback">#FFE57F</color>
+</resources>

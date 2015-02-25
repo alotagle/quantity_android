@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="277dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccentPrimaryDark">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="TOTAL: $0.0"
+            android:id="@+id/textViewDisplay"
+            android:background="@color/white"
+            android:textColor="@color/colorPrimaryDark"
+            android:elevation="15dp"
+            android:layout_alignRight="@+id/fragment"
+            android:layout_alignEnd="@+id/fragment" />
+
+        <fragment
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:name="com.mobile.dev.quantity.view.ItemFragment"
+            android:id="@+id/fragment"
+
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/buttonCreditCard"
+            android:layout_below="@+id/textViewDisplay"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit Card"
+            android:id="@+id/buttonCreditCard"
+            android:layout_marginBottom="93dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/fragment"
+            android:layout_alignStart="@+id/fragment"
+            android:layout_alignRight="@+id/fragment"
+            android:layout_alignEnd="@+id/fragment"
+            android:background="@drawable/custom_btn_main"
+            android:onClick="creditCardPayment"
+             />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:id="@+id/buttoncash"
+            android:onClick="cashPayment"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/buttonCreditCard"
+            android:layout_alignStart="@+id/buttonCreditCard"
+            android:layout_marginBottom="39dp"
+            android:layout_alignRight="@+id/buttonCreditCard"
+            android:layout_alignEnd="@+id/buttonCreditCard"
+            android:background="@drawable/custom_btn_main"
+             />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="3dp"
+        >
+
+        <fragment
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:name="com.mobile.dev.quantity.view.ProductItemFragment"
+            android:id="@+id/fragment2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

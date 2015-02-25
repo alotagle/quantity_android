@@ -1,0 +1,18 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppThemeMain" parent="Theme.AppCompat.Light">
+
+
+        <item name="colorPrimary">@color/coloPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccentPrimary</item>
+
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="colorControlNormal">@color/colorAccentFallback</item>
+
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight & colorSwitchThumbNormal. -->
+    </style>
+</resources>
