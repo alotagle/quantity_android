@@ -160,7 +160,7 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
         }
 
 
-        String host = "https://quantitydgtic.appspot.com";
+        String host = "https://quantitydgticfinal.appspot.com";
         String path = "_ah/api/recibos/v1/enviarRecibo";
         Uri.Builder mUBuilder = null;
         mUBuilder = Uri.parse(host).buildUpon();
@@ -207,8 +207,17 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
             display.setText("TOTAL: $0.0");
 
-            Toast.makeText(getApplicationContext(),R.string.receipt_success,Toast.LENGTH_LONG).show();
+            //manually parsing to productos
+            JsonParser parser = new JsonParser();
+            JsonObject rootObject = parser.parse(result).getAsJsonObject();
+            JsonElement projectElement = rootObject.get("respuestaRecibo");
 
+            if(projectElement.getAsBoolean()) {
+
+                Toast.makeText(getApplicationContext(), R.string.receipt_success, Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "Receipt not sent, Please try again", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override
