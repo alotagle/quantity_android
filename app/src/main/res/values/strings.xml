@@ -16,9 +16,11 @@
     <string name="error_login_auth">User and/or password does not match!</string>
     <string name="action_logout">Logout</string>
     <string name="receipt_success">Receipt sent successful!</string>
-
     <string name="dialog_card_title">Credit Card Details</string>
     <string name="dialog_card_number">Card number</string>
     <string name="dialog_card_expiration">Expiration Date</string>
     <string name="dialog_card_code">CVV Code</string>
+    <string name="title_activity_pay">PayActivity</string>
+    <string name="mail_default">user@quantity.com</string>
+
 </resources>

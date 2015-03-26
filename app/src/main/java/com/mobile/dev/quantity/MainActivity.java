@@ -1,10 +1,13 @@
 package com.mobile.dev.quantity;
 
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,11 +28,20 @@ import com.mobile.dev.quantity.view.ItemFragment;
 import com.mobile.dev.quantity.view.ProductItemFragment;
 import com.mobile.dev.quantity.view.ReceiptConfirmationDialog;
 import com.mobile.dev.quantity.view.dataStorage.SelectedItems;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
+
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,6 +56,9 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
 
     private TextView display;
+    private static PayPalConfiguration config = new PayPalConfiguration()
+            .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
+            .clientId("<YOUR_CLIENT_ID>");
 
 
     //session object helper
@@ -58,9 +73,17 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
         //create session manager object
         mSessionManager = new SessionManager(getApplicationContext());
 
-
+        //paypal
+        Intent intent = new Intent(this, PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        startService(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, PayPalService.class));
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,15 +125,60 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
         ItemFragment mItemFragment = (ItemFragment)getFragmentManager().findFragmentById(R.id.fragment);
         if(mItemFragment!=null){
            Double res =  mItemFragment.addItemTolist(product);
-            display.setText("TOTAL: $"+String.valueOf(res));
+            display.setText(String.format( "Total: $ %.2f", res ));
         }
 
     }
 
     //Handles click on Credit Card Button
     public void creditCardPayment(View view){
-        DialogFragment dialogFragment = new  CreditCardConfirmationDialog();
-        dialogFragment.show(getFragmentManager(),"CreditCardDialogFragment");
+        //DialogFragment dialogFragment = new  CreditCardConfirmationDialog();
+        //dialogFragment.show(getFragmentManager(),"CreditCardDialogFragment");
+
+        String displayText = (String) display.getText();
+        BigDecimal pay = BigDecimal.valueOf(Double.valueOf(displayText));
+        if (pay != new BigDecimal(0)) {
+            PayPalPayment payment = new PayPalPayment(pay, "USD", "sample item",
+                    PayPalPayment.PAYMENT_INTENT_SALE);
+
+            Intent intent = new Intent(this, PaymentActivity.class);
+
+            // send the same configuration for restart resiliency
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+
+            intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+
+            startActivityForResult(intent, 0);
+        } else {
+            Toast.makeText(getApplicationContext(), "Agrega por lo menos un producto a la compra.", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+            if (confirm != null) {
+                try {
+                    Log.i("paymentExample", confirm.toJSONObject().toString(4));
+
+                    // TODO: send 'confirm' to your server for verification.
+                    // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
+                    // for more details.
+
+                } catch (JSONException e) {
+                    Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
+                }
+            }
+        }
+        else if (resultCode == Activity.RESULT_CANCELED) {
+            Log.i("paymentExample", "The user canceled.");
+        }
+        else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+            Log.i("paymentExample", "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+        }
     }
 
     //Handles clicks on Cash Button
@@ -120,8 +188,13 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
             String total = displayText.substring(8);
             QuantityDictionay.debugLog(total);
+        if (Double.valueOf(total) != 0) {
             DialogFragment dialogFragment = CashConfirmationDialog.newInstance(total);
             dialogFragment.show(getFragmentManager(),"CashFragmentDialog");
+        } else {
+            Toast.makeText(getApplicationContext(), "Agrega por lo menos un producto a la compra.", Toast.LENGTH_SHORT).show();
+        }
+
 
 
     }

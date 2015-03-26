@@ -10,11 +10,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mobile.dev.quantity.R;
 import com.mobile.dev.quantity.util.QuantityDictionay;
+import com.mobile.dev.quantity.util.Validations;
 
 /**
  * Created by Luis.Cariño on 17/02/2015.
@@ -53,6 +56,18 @@ public class CashConfirmationDialog extends DialogFragment {
         final EditText editTextCantidad = (EditText)dialogRootView.findViewById(R.id.editTextCantidad);
         final TextView textViewTotal = (TextView) dialogRootView.findViewById(R.id.textViewTotal);
         final TextView textViewCambio = (TextView) dialogRootView.findViewById(R.id.textViewCambio);
+        final EditText editTextEmail = (EditText)dialogRootView.findViewById(R.id.editTextEmail);
+        final CheckBox chkBox = (CheckBox) dialogRootView.findViewById(R.id.checkBoxEmail);
+        chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    editTextEmail.setVisibility(View.VISIBLE);
+                } else {
+                    editTextEmail.setVisibility(View.GONE);
+                }
+            }
+        });
 
         //get argument value passed to this instance
         if(getArguments().containsKey(ARG_TOTAL))
@@ -87,7 +102,7 @@ public class CashConfirmationDialog extends DialogFragment {
                     total = Double.valueOf(getArguments().get(ARG_TOTAL).toString());
                     change = payment - total;
                     //set result to view
-                    textViewCambio.setText("CAMBIO: $" + String.valueOf(change));
+                    textViewCambio.setText(String.format( "Total: $ %.2f", change ));
                 }else{
                     textViewCambio.setText("CAMBIO:");
                 }
@@ -100,6 +115,12 @@ public class CashConfirmationDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mListener.onCashDialogPositiveClick(editTextCantidad.getText().toString());
+                        if (chkBox.isChecked() &&
+                                Validations.validate(Validations.VALIDATION_MAIL,
+                                        editTextEmail.getText().toString())) {
+                            //mListener.onReceiptDialogPositiveClick(
+                              //      editTextEmail.getText().toString());
+                        }
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {

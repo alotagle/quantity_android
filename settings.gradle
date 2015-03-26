@@ -1,1 +1,1 @@
-include ':app', ':backend'
+include ':app', ':backend', ':PayPalAndroidSDK-2.9.0'

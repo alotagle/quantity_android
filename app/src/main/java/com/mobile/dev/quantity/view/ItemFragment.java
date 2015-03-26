@@ -60,7 +60,6 @@ public class ItemFragment extends ListFragment {
         // TODO: Change Adapter to display your content
         /*setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS));*/
-
         setListAdapter(new ArrayAdapter<Producto>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, SelectedItems.ITEMS));
 
@@ -138,13 +137,13 @@ public class ItemFragment extends ListFragment {
      * @param producto added to list
      * @return the sum of elements within adapter
      */
-    public Double addItemTolist(Producto producto){
+    public Double addItemTolist(Producto producto) {
         Double total = 0d;
 
         //ArrayAdapter<DummyContent.DummyItem> adapter =( ArrayAdapter<DummyContent.DummyItem>)getListAdapter();
         ArrayAdapter<Producto> adapter = (ArrayAdapter<Producto>)getListAdapter();
         //DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(String.valueOf(adapter.getCount()+1),value);
-
+        itemExist(producto);
         adapter.add(producto);
         adapter.notifyDataSetChanged();
 
@@ -178,6 +177,15 @@ public class ItemFragment extends ListFragment {
         SelectedItems.ITEMS.clear();
         ArrayAdapter<Producto> adapter = (ArrayAdapter<Producto>)getListAdapter();
         adapter.notifyDataSetChanged();
+    }
+
+    private boolean itemExist(Producto item) {
+        for (int i=0; i<getListView().getAdapter().getCount(); i++) {
+            if ((getListView().getAdapter().getItem(i)).equals(item)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

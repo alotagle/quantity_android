@@ -7,7 +7,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+
 import com.mobile.dev.quantity.R;
+import com.mobile.dev.quantity.util.Validations;
 
 
 /**
@@ -15,7 +18,11 @@ import com.mobile.dev.quantity.R;
  * Created by Luis.Cariño on 18/02/2015.
  */
 public class CreditCardConfirmationDialog extends DialogFragment{
-
+    private View dialogRootView;
+    private EditText editTextCardNumber;
+    private EditText editTextMonth;
+    private EditText editTextYear;
+    private EditText editTextCVV;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -24,7 +31,11 @@ public class CreditCardConfirmationDialog extends DialogFragment{
 
         //get layout inflater
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        View dialogRootView = layoutInflater.inflate(R.layout.layout_credit_card_dialog, null);
+        dialogRootView = layoutInflater.inflate(R.layout.layout_credit_card_dialog, null);
+        editTextCardNumber = (EditText) dialogRootView.findViewById(R.id.editTextCardNumber);
+        editTextMonth = (EditText) dialogRootView.findViewById(R.id.editTextMonth);
+        editTextYear = (EditText) dialogRootView.findViewById(R.id.editTextYear);
+        editTextCVV = (EditText) dialogRootView.findViewById(R.id.editTextCVV);
         builder.setView(dialogRootView);
 
 
@@ -33,7 +44,9 @@ public class CreditCardConfirmationDialog extends DialogFragment{
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (isValid()) {
 
+                        }
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -45,6 +58,16 @@ public class CreditCardConfirmationDialog extends DialogFragment{
 
         return builder.create();
 
+    }
+
+    private boolean isValid() {
+        if (Validations.validate(Validations.VALIDATION_CC_NUMBER,
+                Validations.getStringNullable(editTextCardNumber.getText().toString()))
+                && Validations.validate(Validations.VALIDATION_CC_NUMBER,
+                Validations.getStringNullable(editTextCardNumber.getText().toString()))) {
+            return true;
+        }
+        return false;
     }
 
 }

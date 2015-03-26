@@ -8,22 +8,19 @@
         android:text="email"
         android:id="@+id/checkBoxEmail"
         android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="80dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="66dp" />
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/checkBox"
+        android:layout_centerHorizontal="true" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Impreso"
         android:id="@+id/checkBox"
-        android:layout_below="@+id/checkBoxEmail"
-        android:layout_alignLeft="@+id/checkBoxEmail"
-        android:layout_alignStart="@+id/checkBoxEmail"
-        android:checked="false" />
+        android:checked="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -31,13 +28,12 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/editTextEmail"
-        android:layout_below="@+id/checkBoxEmail"
-        android:layout_toRightOf="@+id/checkBox"
-        android:layout_marginLeft="49dp"
-        android:layout_marginStart="49dp"
+        android:gravity="center"
         android:hint="user@quantity.com"
+        android:visibility="gone"
         android:textColor="@color/background_material_dark"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/checkBoxEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
 
 </RelativeLayout>

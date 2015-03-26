@@ -20,12 +20,12 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/editTextCardNumber"
         android:layout_marginLeft="49dp"
         android:layout_marginStart="49dp"
         android:hint="@string/dialog_card_number"
         android:textColor="@color/background_material_dark"
-        android:layout_above="@+id/editText3"
+        android:layout_above="@+id/editTextMonth"
         android:layout_toRightOf="@+id/imageView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -33,12 +33,12 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/editTextCVV"
         android:layout_alignBottom="@+id/imageView"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
+        android:layout_alignLeft="@+id/editTextCardNumber"
+        android:layout_alignStart="@+id/editTextCardNumber"
+        android:layout_alignRight="@+id/editTextCardNumber"
+        android:layout_alignEnd="@+id/editTextCardNumber"
         android:hint="@string/dialog_card_code"
         android:textColor="@color/background_material_dark"/>
 
@@ -47,10 +47,10 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText3"
-        android:layout_above="@+id/editText2"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
+        android:id="@+id/editTextMonth"
+        android:layout_above="@+id/editTextCVV"
+        android:layout_alignLeft="@+id/editTextCardNumber"
+        android:layout_alignStart="@+id/editTextCardNumber"
         android:hint="MM"
         android:textColor="@color/background_material_dark"/>
 
@@ -59,13 +59,13 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText4"
+        android:id="@+id/editTextYear"
         android:hint="YY"
         android:textColor="@color/background_material_dark"
-        android:layout_below="@+id/editText"
-        android:layout_toRightOf="@+id/editText3"
-        android:layout_alignRight="@+id/editText2"
-        android:layout_alignEnd="@+id/editText2" />
+        android:layout_below="@+id/editTextCardNumber"
+        android:layout_toRightOf="@+id/editTextMonth"
+        android:layout_alignRight="@+id/editTextCVV"
+        android:layout_alignEnd="@+id/editTextCVV" />
 
 
 </RelativeLayout>

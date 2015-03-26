@@ -57,4 +57,29 @@
         android:layout_below="@+id/textViewChange"
         android:layout_alignLeft="@+id/textViewChange"
         android:layout_alignStart="@+id/textViewChange" />
+
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="email"
+        android:id="@+id/checkBoxEmail"
+        android:checked="false"
+        android:layout_below="@+id/textViewCambio"
+        android:layout_alignRight="@+id/textViewCambio"
+        android:layout_alignEnd="@+id/textViewCambio" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/editTextEmail"
+        android:gravity="center"
+        android:hint="@string/mail_default"
+        android:visibility="gone"
+        android:textColor="@color/background_material_dark"
+        android:layout_alignTop="@+id/checkBoxEmail"
+        android:layout_alignLeft="@+id/editTextCantidad"
+        android:layout_alignStart="@+id/editTextCantidad" />
 </RelativeLayout>

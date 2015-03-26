@@ -25,6 +25,7 @@ import com.mobile.dev.quantity.controller.MyAdapter;
 import com.mobile.dev.quantity.model.Producto;
 import com.mobile.dev.quantity.util.QuantityDictionay;
 import com.mobile.dev.quantity.util.SessionManager;
+import com.mobile.dev.quantity.util.Validations;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -97,8 +98,8 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         passwordEditText = (EditText) findViewById(R.id.editTextPass);
 
         //sets default values for login
-        userNameEditText.setText("paraLlevar");
-        passwordEditText.setText("Z0Gw8G8Mki");
+        //userNameEditText.setText("paraLlevar");
+        //passwordEditText.setText("Z0Gw8G8Mki");
 
         loginButton = (Button) findViewById(R.id.buttonLogin);
         loginButton.setOnClickListener(this);
@@ -171,11 +172,11 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     public boolean attemptLogin(){
         boolean status = true;
 
-        if(userNameEditText.getText().length() == 0){
+        if(Validations.validate(Validations.VALIDATION_NAME, Validations.getStringNullable(userNameEditText.getText().toString()))) {
             userNameEditText.setError(getResources().getString(R.string.error_login_username));
             status = false;
         }
-        if(passwordEditText.getText().length() == 0){
+        if(Validations.validate(Validations.VALIDATION_NAME, Validations.getStringNullable(passwordEditText.getText().toString()))){
             passwordEditText.setError(getResources().getString(R.string.error_login_password));
             status = false;
         }
