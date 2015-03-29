@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,11 +23,11 @@ import com.google.gson.reflect.TypeToken;
 import com.mobile.dev.quantity.model.Producto;
 import com.mobile.dev.quantity.util.QuantityDictionay;
 import com.mobile.dev.quantity.util.SessionManager;
+import com.mobile.dev.quantity.util.Validations;
 import com.mobile.dev.quantity.view.CashConfirmationDialog;
 import com.mobile.dev.quantity.view.CreditCardConfirmationDialog;
 import com.mobile.dev.quantity.view.ItemFragment;
 import com.mobile.dev.quantity.view.ProductItemFragment;
-import com.mobile.dev.quantity.view.ReceiptConfirmationDialog;
 import com.mobile.dev.quantity.view.dataStorage.SelectedItems;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -52,7 +53,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity implements ItemFragment.OnFragmentInteractionListener,
         ProductItemFragment.OnProductItemFragmentInteraction,
         CashConfirmationDialog.CashConfirmationListener,
-        ReceiptConfirmationDialog.ReceiptConfirmationListener{
+        CreditCardConfirmationDialog.ReceiptConfirmationListener{
 
 
     private TextView display;
@@ -201,8 +202,8 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     @Override
     public void onCashDialogPositiveClick(String message) {
-        DialogFragment dialogFragment = new ReceiptConfirmationDialog();
-        dialogFragment.show(getFragmentManager(),"ReceiptFragmentDialog");
+        DialogFragment dialogFragment = new CreditCardConfirmationDialog();
+        dialogFragment.show(getFragmentManager(), "ReceiptFragmentDialog");
     }
 
     @Override

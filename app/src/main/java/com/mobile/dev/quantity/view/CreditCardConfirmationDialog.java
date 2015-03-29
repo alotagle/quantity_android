@@ -1,5 +1,6 @@
 package com.mobile.dev.quantity.view;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -23,6 +24,8 @@ public class CreditCardConfirmationDialog extends DialogFragment{
     private EditText editTextMonth;
     private EditText editTextYear;
     private EditText editTextCVV;
+    // Use this instance of the interface to deliver action events
+    ReceiptConfirmationListener mListener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -70,4 +73,21 @@ public class CreditCardConfirmationDialog extends DialogFragment{
         return false;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mListener = (ReceiptConfirmationListener) activity;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement ReceiptConfirmationListener");
+        }
+    }
+
+    public interface ReceiptConfirmationListener{
+        public void onReceiptDialogPositiveClick(String email);
+    }
 }
