@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +21,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.mobile.dev.quantity.controller.MyAdapter;
 import com.mobile.dev.quantity.model.Producto;
 import com.mobile.dev.quantity.util.QuantityDictionay;
 import com.mobile.dev.quantity.util.SessionManager;
@@ -37,7 +36,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
@@ -172,11 +170,12 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     public boolean attemptLogin(){
         boolean status = true;
 
-        if(Validations.validate(Validations.VALIDATION_NAME, Validations.getStringNullable(userNameEditText.getText().toString()))) {
+        if(!Validations.validate(Validations.VALIDATION_NAME, Validations.getStringNullable(userNameEditText.getText().toString()))) {
             userNameEditText.setError(getResources().getString(R.string.error_login_username));
             status = false;
         }
-        if(Validations.validate(Validations.VALIDATION_NAME, Validations.getStringNullable(passwordEditText.getText().toString()))){
+
+        if(!Validations.validate(Validations.VALIDATION_PASSWORD, Validations.getStringNullable(passwordEditText.getText().toString()))){
             passwordEditText.setError(getResources().getString(R.string.error_login_password));
             status = false;
         }

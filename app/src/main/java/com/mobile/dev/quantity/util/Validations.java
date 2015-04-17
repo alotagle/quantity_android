@@ -6,11 +6,10 @@ package com.mobile.dev.quantity.util;
 
         import android.util.Log;
 
-        import java.util.ArrayList;
-        import java.util.Arrays;
-        import java.util.Calendar;
-        import java.util.Date;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ManuelOrtiz on 10/10/2014.
@@ -22,7 +21,7 @@ public class Validations {
     public static final int VALIDATION_MAIL = 3;
     public static final int VALIDATION_BIRTH_DATE = 4;
     public static final int VALIDATION_EXPIRATION_DATE = 5;
-    public static final int VALIDATION_EXPIRATION_MONTH_YEAR = 6;
+    public static final int VALIDATION_PASSWORD = 6;
     public static final int VALIDATION_CODE = 7;
     public static final int VALIDATION_TYPE = 8;
     public static final int VALIDATION_NIF = 9;
@@ -64,6 +63,9 @@ public class Validations {
                 break;
             case VALIDATION_NAME:
                 isValid = validateTextFields(value, 2, 30);
+                break;
+            case VALIDATION_PASSWORD:
+                isValid = validateTextAndNumberFields(value, 2, 30);
                 break;
             case VALIDATION_ADDRESS:
                 //isValid = validateTextAndNumberFields(value, 2, 30);
