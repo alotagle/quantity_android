@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="TOTAL: $0.0"
+            android:text="TOTAL: $ 0.00"
             android:id="@+id/textViewDisplay"
             android:background="@color/white"
             android:textColor="@color/colorPrimaryDark"
@@ -39,7 +39,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Credit Card"
+            android:text="Tarjeta"
             android:id="@+id/buttonCreditCard"
             android:layout_marginBottom="93dp"
             android:layout_alignParentBottom="true"
@@ -54,7 +54,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cash"
+            android:text="Efectivo"
             android:id="@+id/buttoncash"
             android:onClick="cashPayment"
             android:layout_alignParentBottom="true"

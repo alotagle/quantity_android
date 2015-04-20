@@ -5,9 +5,8 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,9 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mobile.dev.quantity.model.Producto;
 import com.mobile.dev.quantity.util.QuantityDictionay;
 import com.mobile.dev.quantity.util.SessionManager;
-import com.mobile.dev.quantity.util.Validations;
 import com.mobile.dev.quantity.view.CashConfirmationDialog;
-import com.mobile.dev.quantity.view.CreditCardConfirmationDialog;
 import com.mobile.dev.quantity.view.ItemFragment;
 import com.mobile.dev.quantity.view.ProductItemFragment;
 import com.mobile.dev.quantity.view.dataStorage.SelectedItems;
@@ -45,21 +42,24 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements ItemFragment.OnFragmentInteractionListener,
         ProductItemFragment.OnProductItemFragmentInteraction,
-        CashConfirmationDialog.CashConfirmationListener,
-        CreditCardConfirmationDialog.ReceiptConfirmationListener{
+        CashConfirmationDialog.CashConfirmationListener {
 
 
     private TextView display;
     private static PayPalConfiguration config = new PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
-            .clientId("<YOUR_CLIENT_ID>");
+            .acceptCreditCards(true)
+            .languageOrLocale("es_MX")
+            .rememberUser(true)
+            .merchantName("Quantity")
+            .clientId("AR5BKRVgoI5ZwOqWbss_IhusbzgzmbStai51H9sRjcl4FPFmX-a-b_0zOwel3oW2m1bG582yeI91wFO_");
+    private double numCuenta = 0;
 
 
     //session object helper
@@ -71,10 +71,10 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
         display = (TextView) findViewById(R.id.textViewDisplay);
 
-        //create session manager object
+        // Create session manager object
         mSessionManager = new SessionManager(getApplicationContext());
 
-        //paypal
+        // Paypal
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         startService(intent);
@@ -115,8 +115,8 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
     //messages send from ItemFragment
     @Override
     public void onFragmentInteraction(String id) {
-        display.setText("TOTAL: $"+id);
-        
+        numCuenta = Double.parseDouble(id);
+        display.setText(String.format( "Total: $ %.2f", numCuenta));
     }
 
     //messages send from ProducItemFragment
@@ -125,21 +125,19 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
         ItemFragment mItemFragment = (ItemFragment)getFragmentManager().findFragmentById(R.id.fragment);
         if(mItemFragment!=null){
-           Double res =  mItemFragment.addItemTolist(product);
+            Double res =  mItemFragment.addItemTolist(product);
             display.setText(String.format( "Total: $ %.2f", res ));
+            numCuenta = res;
         }
-
     }
 
     //Handles click on Credit Card Button
-    public void creditCardPayment(View view){
-        //DialogFragment dialogFragment = new  CreditCardConfirmationDialog();
-        //dialogFragment.show(getFragmentManager(),"CreditCardDialogFragment");
+    public void creditCardPayment(View view) {
 
-        String displayText = (String) display.getText();
-        BigDecimal pay = BigDecimal.valueOf(Double.valueOf(displayText));
-        if (pay != new BigDecimal(0)) {
-            PayPalPayment payment = new PayPalPayment(pay, "USD", "sample item",
+        BigDecimal pay = new BigDecimal(numCuenta);
+
+        if (pay.compareTo(BigDecimal.ZERO) != 0) {
+            PayPalPayment payment = new PayPalPayment(pay, "MXN", "Cuenta Quantity",
                     PayPalPayment.PAYMENT_INTENT_SALE);
 
             Intent intent = new Intent(this, PaymentActivity.class);
@@ -153,8 +151,6 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
         } else {
             Toast.makeText(getApplicationContext(), "Agrega por lo menos un producto a la compra.", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     @Override
@@ -165,9 +161,12 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
                 try {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
 
-                    // TODO: send 'confirm' to your server for verification.
-                    // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
-                    // for more details.
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Pago realizado satisfactoriamente", Toast.LENGTH_LONG)
+                            .show();
+
+                    limpiarLista();
 
                 } catch (JSONException e) {
                     Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
@@ -183,40 +182,33 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
     }
 
     //Handles clicks on Cash Button
-    public void cashPayment(View view){
+    public void cashPayment(View view) {
 
         String displayText = (String) display.getText();
+        String total = displayText.substring(8);
+        QuantityDictionay.debugLog(total);
 
-            String total = displayText.substring(8);
-            QuantityDictionay.debugLog(total);
         if (Double.valueOf(total) != 0) {
             DialogFragment dialogFragment = CashConfirmationDialog.newInstance(total);
             dialogFragment.show(getFragmentManager(),"CashFragmentDialog");
         } else {
             Toast.makeText(getApplicationContext(), "Agrega por lo menos un producto a la compra.", Toast.LENGTH_SHORT).show();
         }
-
-
-
     }
 
     @Override
-    public void onCashDialogPositiveClick(String message) {
-        DialogFragment dialogFragment = new CreditCardConfirmationDialog();
-        dialogFragment.show(getFragmentManager(), "ReceiptFragmentDialog");
-    }
-
-    @Override
-    public void onReceiptDialogPositiveClick(String email) {
-
+    public void onCashDialogPositiveClick(String email) {
         QuantityDictionay.debugLog(email);
         QuantityDictionay.debugLog("COMPRADOS--->"+String.valueOf(SelectedItems.ITEMS.size()));
         QuantityDictionay.debugLog(generateReceiptUrl(SelectedItems.ITEMS,email));
 
-        //generate url appending the items selected
-        String url = generateReceiptUrl(SelectedItems.ITEMS,email);
-        new SendReceiptTask().execute(url);
-
+        if (email == "") {
+            limpiarLista();
+        } else {
+            //generate url appending the items selected
+            String url = generateReceiptUrl(SelectedItems.ITEMS, email);
+            new SendReceiptTask().execute(url);
+        }
     }
 
     public String generateReceiptUrl(List<Producto> items,String email){
@@ -250,12 +242,11 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
     }
 
 
-
     /**
      * Private Async Task to send purchased products to server
      * and generate email confirmation
      */
-    private class SendReceiptTask extends AsyncTask<String,Void,String>{
+    private class SendReceiptTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -276,10 +267,8 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
         @Override
         protected void onPostExecute(String result) {
             QuantityDictionay.debugLog(result);
-            ItemFragment itemFragment = (ItemFragment)getFragmentManager().findFragmentById(R.id.fragment);
-            itemFragment.clearList();
 
-            display.setText("TOTAL: $0.0");
+            limpiarLista();
 
             //manually parsing to productos
             JsonParser parser = new JsonParser();
@@ -287,10 +276,9 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
             JsonElement projectElement = rootObject.get("respuestaRecibo");
 
             if(projectElement.getAsBoolean()) {
-
                 Toast.makeText(getApplicationContext(), R.string.receipt_success, Toast.LENGTH_LONG).show();
             }else{
-                Toast.makeText(getApplicationContext(), "Receipt not sent, Please try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Recibo no enviado, por favor intente de nuevo", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -357,7 +345,6 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
             }
 
             return responseAsString.toString();
-
         }
 
         //Reads server response as String and parse it to a POJO array
@@ -385,5 +372,12 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
         }
     }
 
+    private void limpiarLista() {
+        ItemFragment itemFragment = (ItemFragment)getFragmentManager().findFragmentById(R.id.fragment);
+        itemFragment.clearList();
+
+        numCuenta = 0;
+        display.setText(String.format( "Total: $ %.2f", numCuenta));
+    }
 
 }

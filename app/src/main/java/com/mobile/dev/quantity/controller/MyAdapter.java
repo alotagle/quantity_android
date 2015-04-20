@@ -1,17 +1,15 @@
 package com.mobile.dev.quantity.controller;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.mobile.dev.quantity.R;
 import com.mobile.dev.quantity.model.Producto;
 import com.mobile.dev.quantity.util.QuantityDictionay;
@@ -27,7 +25,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     //interface variable reference from Fragment/Activity implementing this adapter
     private static OnItemClickedInteractionListener mListener;
 
-    //parent conext
+    //parent context
     private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder
@@ -88,9 +86,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }else{
 
         }
-
-
-
     }
 
 

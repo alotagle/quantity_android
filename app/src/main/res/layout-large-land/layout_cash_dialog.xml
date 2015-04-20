@@ -6,13 +6,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="PAGO:"
+        android:text="TOTAL:"
+        android:id="@+id/textViewTotal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="PAGO: $"
         android:id="@+id/textView"
-        android:layout_marginLeft="48dp"
-        android:layout_marginStart="48dp"
-        android:layout_above="@+id/textViewChange"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginBottom="25dp"
+        android:layout_below="@+id/textViewTotal"
+        android:layout_alignLeft="@+id/textViewTotal"
+        android:layout_marginRight="15dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -21,53 +30,34 @@
         android:ems="10"
         android:id="@+id/editTextCantidad"
         android:layout_weight="1"
-        android:layout_marginTop="90dp"
-        android:layout_alignParentTop="true"
         android:textColor="@color/background_material_dark"
+        android:layout_alignBaseline="@+id/textView"
+        android:layout_alignBottom="@+id/textView"
         android:layout_toRightOf="@+id/textView"
-        android:layout_marginLeft="28dp"
-        android:layout_marginStart="28dp" />
+        android:layout_toEndOf="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textViewChange"
-        android:layout_below="@+id/editTextCantidad"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="TOTAL"
-        android:id="@+id/textViewTotal"
-        android:layout_above="@+id/textView"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:layout_marginBottom="25dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="CAMBIO"
+        android:text="CAMBIO:"
         android:id="@+id/textViewCambio"
-        android:layout_below="@+id/textViewChange"
-        android:layout_alignLeft="@+id/textViewChange"
-        android:layout_alignStart="@+id/textViewChange" />
+        android:layout_marginBottom="25dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/textViewTotal" />
 
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="email"
+        android:text="Correo electrónico"
         android:id="@+id/checkBoxEmail"
         android:checked="false"
         android:layout_below="@+id/textViewCambio"
-        android:layout_alignRight="@+id/textViewCambio"
-        android:layout_alignEnd="@+id/textViewCambio" />
+        android:layout_alignLeft="@+id/textViewCambio"
+        android:layout_alignStart="@+id/textViewCambio"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="15dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -79,7 +69,8 @@
         android:hint="@string/mail_default"
         android:visibility="gone"
         android:textColor="@color/background_material_dark"
-        android:layout_alignTop="@+id/checkBoxEmail"
-        android:layout_alignLeft="@+id/editTextCantidad"
-        android:layout_alignStart="@+id/editTextCantidad" />
+        android:layout_alignBaseline="@+id/checkBoxEmail"
+        android:layout_toRightOf="@+id/checkBoxEmail"
+        android:layout_toEndOf="@+id/checkBoxEmail" />
+
 </RelativeLayout>

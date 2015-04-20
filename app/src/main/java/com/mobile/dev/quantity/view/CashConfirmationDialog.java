@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -26,6 +27,11 @@ public class CashConfirmationDialog extends DialogFragment {
 
     // Use this instance of the interface to deliver action events
     CashConfirmationListener mListener;
+    Button button;
+    EditText editTextEmail;
+    CheckBox chkBox;
+    EditText editTextCantidad;
+    boolean pago_correcto = false;
 
     //variables to bundle
     private static final String ARG_TOTAL = "total";
@@ -53,11 +59,11 @@ public class CashConfirmationDialog extends DialogFragment {
         builder.setView(dialogRootView);
 
         //set references to fragment dialog ui elements
-        final EditText editTextCantidad = (EditText)dialogRootView.findViewById(R.id.editTextCantidad);
+        editTextCantidad = (EditText)dialogRootView.findViewById(R.id.editTextCantidad);
         final TextView textViewTotal = (TextView) dialogRootView.findViewById(R.id.textViewTotal);
         final TextView textViewCambio = (TextView) dialogRootView.findViewById(R.id.textViewCambio);
-        final EditText editTextEmail = (EditText)dialogRootView.findViewById(R.id.editTextEmail);
-        final CheckBox chkBox = (CheckBox) dialogRootView.findViewById(R.id.checkBoxEmail);
+        editTextEmail = (EditText)dialogRootView.findViewById(R.id.editTextEmail);
+        chkBox = (CheckBox) dialogRootView.findViewById(R.id.checkBoxEmail);
         chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -71,7 +77,10 @@ public class CashConfirmationDialog extends DialogFragment {
 
         //get argument value passed to this instance
         if(getArguments().containsKey(ARG_TOTAL))
-            textViewTotal.setText("TOTAL : $"+getArguments().get(ARG_TOTAL).toString());
+            textViewTotal.setText("TOTAL: $ " + getArguments().get(ARG_TOTAL).toString());
+
+        textViewCambio.setTextColor(Color.RED);
+        textViewCambio.setText(String.format( "FALTANTE: $ " + getArguments().get(ARG_TOTAL).toString()));
 
         //set text change listener to show on textview
         editTextCantidad.addTextChangedListener(new TextWatcher() {
@@ -88,7 +97,7 @@ public class CashConfirmationDialog extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 //check if input is not null
-                if(s.length()>0) {
+                if(s.length() > 0) {
                     //parsing string values and make subtraction
                     Double total,
                             payment = null,
@@ -101,8 +110,17 @@ public class CashConfirmationDialog extends DialogFragment {
                     }
                     total = Double.valueOf(getArguments().get(ARG_TOTAL).toString());
                     change = payment - total;
-                    //set result to view
-                    textViewCambio.setText(String.format( "Total: $ %.2f", change ));
+
+                    if (change >= 0) {
+                        textViewCambio.setTextColor(Color.BLACK);
+                        textViewCambio.setText(String.format( "CAMBIO: $ %.2f", change ));
+                        pago_correcto = true;
+                    } else {
+                        textViewCambio.setTextColor(Color.RED);
+                        textViewCambio.setText(String.format( "FALTANTE: $ %.2f", Math.abs(change)));
+                        pago_correcto = false;
+                    }
+
                 }else{
                     textViewCambio.setText("CAMBIO:");
                 }
@@ -111,27 +129,10 @@ public class CashConfirmationDialog extends DialogFragment {
 
         //configure dialog elements
         builder.setTitle(R.string.cash_dialog_title)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mListener.onCashDialogPositiveClick(editTextCantidad.getText().toString());
-                        if (chkBox.isChecked() &&
-                                Validations.validate(Validations.VALIDATION_MAIL,
-                                        editTextEmail.getText().toString())) {
-                            //mListener.onReceiptDialogPositiveClick(
-                              //      editTextEmail.getText().toString());
-                        }
-                    }
-                })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
+                .setPositiveButton("ACEPTAR", null)
+                .setNegativeButton("CANCELAR", null);
 
         return builder.create();
-
     }
 
 
@@ -151,6 +152,41 @@ public class CashConfirmationDialog extends DialogFragment {
     }
 
     public interface CashConfirmationListener{
-        public void onCashDialogPositiveClick(String message);
+        public void onCashDialogPositiveClick(String email);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        AlertDialog d = (AlertDialog) getDialog();
+        if (d != null) {
+            button = d.getButton(Dialog.BUTTON_POSITIVE);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (pago_correcto) {
+                        if (chkBox.isChecked()) {
+                            if (Validations.validate(Validations.VALIDATION_MAIL, editTextEmail.getText().toString())) {
+                                mListener.onCashDialogPositiveClick(editTextEmail.getText().toString());
+                                dismiss();
+                            } else {
+                                editTextEmail.setError(getResources().getString(R.string.error_dialog_mail));
+                            }
+                        } else {
+                            if (editTextCantidad.getText().toString().trim().length() == 0) {
+                                editTextCantidad.setError(getResources().getString(R.string.error_dialog_no_pago));
+                            } else {
+                                mListener.onCashDialogPositiveClick("");
+                                dismiss();
+                            }
+                        }
+                    } else {
+                        editTextCantidad.setError(getResources().getString(R.string.error_dialog_pago_incorrecto));
+                    }
+                }
+            });
+        }
     }
 }

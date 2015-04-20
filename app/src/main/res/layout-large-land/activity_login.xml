@@ -43,7 +43,8 @@
             android:hint="@string/textView_username"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.48"
-            />
+            android:autoText="false"
+            android:text="paraLlevar" />
 
         <EditText
             android:layout_width="395dp"
@@ -54,7 +55,7 @@
             android:id="@+id/editTextPass"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.48"
-            />
+            android:text="Z0Gw8G8Mki" />
 
         <Button
             android:layout_width="437dp"
@@ -63,39 +64,6 @@
             android:id="@+id/buttonLogin"
             android:background="@drawable/custom_btn_login"
             android:layout_gravity="center_horizontal" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_weight="0.48">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Not a member? "
-                android:id="@+id/textView2"
-                android:layout_gravity="center_horizontal"
-
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Sign Up."
-                android:textColor="@color/colorAccentPrimary"
-                android:id="@+id/textViewSignUp"
-                android:layout_gravity="center_horizontal"
-                />
-
-
-        </LinearLayout>
-
-
 
 
     </LinearLayout>
